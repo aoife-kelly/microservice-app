@@ -11,6 +11,7 @@ async function uploadFile() {
     try {
         status.innerText = "Requesting upload URL...";
 
+        // Use your actual API Gateway Invoke URL here
         const response = await fetch("https://smme10qp9l.execute-api.eu-west-1.amazonaws.com/dev/upload-url");
 
         if (!response.ok) {
@@ -22,11 +23,10 @@ async function uploadFile() {
 
         status.innerText = "Uploading file to S3...";
 
+        // To prevent SignatureDoesNotMatch errors, we remove the explicit Content-Type header
+        // This must match the Lambda's presigned URL generation parameters
         const uploadResponse = await fetch(uploadURL, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
             body: file
         });
 
